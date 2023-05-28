@@ -1,23 +1,34 @@
 #include "uart.h"
 #include "forthvm.h"
+#include "dictionary.h"
 
-int main()
-{
-    uart_init();
-
-    // Initialize other components and peripherals if needed
-
-    // Initialize and start TolerantForth system
+int main() {
     forthvm_init();
-
-    // Enter the main loop of the TolerantForth system
-    forthvm_run();
-
-    // The program should not reach here
-    while (1)
-    {
-        // Handle any error or recovery mechanism
+    
+    printf("TolerantForth v0.01\n");
+    printf("Type 'bye' to exit.\n\n");
+    
+    char input[256];
+    
+    // REPL (Read-Eval-Print Loop)
+    while (1) {
+        printf("> ");
+        fgets(input, sizeof(input), stdin);
+        
+        // Remove trailing newline character
+        input[strcspn(input, "\n")] = '\0';
+        
+        // Exit if the user types 'bye'
+        if (strcmp(input, "bye") == 0) {
+            break;
+        }
+        
+        // Parse and execute the Forth command
+        forthvm_interpret(input);
     }
-
+    
+    printf("\nGoodbye!\n");
+    
     return 0;
 }
+
