@@ -87,6 +87,17 @@ void dat(void);
 void count(void);
 void max(void);
 void min(void);
+void dup2(void);
+void swap2(void);
+void drop2(void);
+void over2(void);
+void pick2(void);
+void rot2(void);
+void minus(void);
+void negate(void);
+void max2(void);
+void min2(void);
+
 
 // Array of primitive functions
 void (*primitives[])() = {
@@ -151,6 +162,16 @@ void (*primitives[])() = {
     count, // 58
     max,   // 59
     min    // 60
+    dup2   // 61
+    swap2  // 62
+    drop2  // 63
+    over2  // 64
+    pick2  // 65
+    rot2   // 66
+    minus  // 67
+    negate // 68
+    max2   // 69
+    min2   // 70
 };
 
 #endif /* FORTHVM_H */
