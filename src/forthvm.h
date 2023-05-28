@@ -10,6 +10,12 @@
 struct Dictionary;
 typedef struct Dictionary Dictionary;
 
+// Definition of forthvm_word struct
+typedef struct {
+    const char* name;
+    void (*func)();
+} forthvm_word;
+
 // Function prototypes
 void forthvm_init();
 void forthvm_run();
@@ -18,7 +24,6 @@ int forthvm_pop();
 void forthvm_execute(int token);
 void forthvm_define_word(const char *name, void (*func)());
 void forthvm_reset();
-
 
 // Primitive function declarations
 void bye(void);
