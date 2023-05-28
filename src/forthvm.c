@@ -17,6 +17,29 @@ int32_t thread = 0;
 int32_t data[8192];
 unsigned char cData[32768];
 
+// DICTIONAY LOOKUP
+// Structure to represent a Forth word
+typedef struct {
+    const char* name;
+    void (*func)();
+} forthvm_word;
+
+// Dictionary entry array
+forthvm_word dictionary[MAX_DICTIONARY_SIZE];
+
+// Number of words in the dictionary
+int numWords = 0;
+
+// Function to find a word in the dictionary by name
+forthvm_word* forthvm_find_word(const char* name) {
+    int i;
+    for (i = 0; i < numWords; i++) {
+        if (strcmp(dictionary[i].name, name) == 0) {
+            return &dictionary[i];
+        }
+    }
+    return NULL; // Word not found
+}
 
 // Parser functions 
 void parse_input() {
@@ -531,4 +554,33 @@ void forthvm_run(const char* input) {
         // Move to the next token
         token = strtok(NULL, " ");
     }
+}
+int main() {
+    forthvm_init();
+    
+    printf("TolerantForth v0.01\n");
+    printf("Type 'bye' to exit.\n\n");
+    
+    char input[256];
+    
+    // REPL (Read-Eval-Print Loop)
+    while (1) {
+        printf("> ");
+        fgets(input, sizeof(input), stdin);
+        
+        // Remove trailing newline character
+        input[strcspn(input, "\n")] = '\0';
+        
+        // Exit if the user types 'bye'
+        if (strcmp(input, "bye") == 0) {
+            break;
+        }
+        
+        // Parse and execute the Forth command
+        forthvm_interpret(input);
+    }
+    
+    printf("\nGoodbye!\n");
+    
+    return 0;
 }
