@@ -17,30 +17,6 @@ int32_t thread = 0;
 int32_t data[8192];
 unsigned char cData[32768];
 
-// DICTIONAY LOOKUP
-// Structure to represent a Forth word
-typedef struct {
-    const char* name;
-    void (*func)();
-} forthvm_word;
-
-// Dictionary entry array
-forthvm_word dictionary[MAX_DICTIONARY_SIZE];
-
-// Number of words in the dictionary
-int numWords = 0;
-
-// Function to find a word in the dictionary by name
-forthvm_word* forthvm_find_word(const char* name) {
-    int i;
-    for (i = 0; i < numWords; i++) {
-        if (strcmp(dictionary[i].name, name) == 0) {
-            return &dictionary[i];
-        }
-    }
-    return NULL; // Word not found
-}
-
 // Parser functions 
 void parse_input() {
     char input[256];
