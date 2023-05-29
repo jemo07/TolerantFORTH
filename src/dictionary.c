@@ -1,40 +1,42 @@
 #include "dictionary.h"
+#include <stdlib.h>
+#include <string.h>
 
-// Define the maximum number of dictionary entries
-#define MAX_ENTRIES 1000
-
-// Define the maximum length of a word
-#define MAX_WORD_LENGTH 32
-
-// Structure representing a dictionary entry
+// Structure representing a dictionary word entry
 typedef struct {
-    char word[MAX_WORD_LENGTH];
-    void (*code)();
-} DictionaryEntry;
+    char name[MAX_WORD_LENGTH];
+    forthvm_word_func func;
+} forthvm_word_entry;
 
-// Array to store the dictionary entries
-static DictionaryEntry dictionary[MAX_ENTRIES];
+static forthvm_word_entry* dictionary = NULL;
+static int num_entries = 0;
 
-// Variable to keep track of the number of entries in the dictionary
-static int numEntries = 0;
+void dictionary_init() {
+    // Initialize the dictionary
+    dictionary = (forthvm_word_entry*)malloc(MAX_ENTRIES * sizeof(forthvm_word_entry));
+    num_entries = 0;
+}
 
-// Function to add a new word to the dictionary
-void dictionary_add(const char* word, void (*code)()) {
-    if (numEntries < MAX_ENTRIES) {
-        // Copy the word and code into the dictionary entry
-        strcpy(dictionary[numEntries].word, word);
-        dictionary[numEntries].code = code;
-        numEntries++;
+void dictionary_define_word(const char *name, forthvm_word_func func) {
+    // Add the word to the dictionary
+    if (num_entries < MAX_ENTRIES) {
+        strncpy(dictionary[num_entries].name, name, MAX_WORD_LENGTH - 1);
+        dictionary[num_entries].func = func;
+        num_entries++;
     } else {
         // Handle error: dictionary is full
+        printf("Error: Dictionary is full. Cannot add word '%s'\n", name);
     }
 }
 
-// Function to find the code associated with a word in the dictionary
-void (*dictionary_find(const char* word))() {
-    for (int i = 0; i < numEntries; i++) {
-        if (strcmp(dictionary[i].word, word) == 0) {
-            return dictionary[i].code;
+forthvm_word* dictionary_find_word(const char *name) {
+    // Search for the word in the dictionary
+    for (int i = 0; i < num_entries; i++) {
+        if (strcmp(dictionary[i].name, name) == 0) {
+            forthvm_word* word = (forthvm_word*)malloc(sizeof(forthvm_word));
+            strncpy(word->name, dictionary[i].name, MAX_WORD_LENGTH - 1);
+            word->func = dictionary[i].func;
+            return word;
         }
     }
     return NULL;  // Word not found in dictionary
