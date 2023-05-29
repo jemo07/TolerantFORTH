@@ -1,14 +1,11 @@
 #ifndef DICTIONARY_H
 #define DICTIONARY_H
 
-// Define the maximum length of a word
-#define MAX_WORD_LENGTH 32
+#include "forthvm.h"
 
-// Function to add a new word to the dictionary
-void dictionary_add(const char* word, void (*code)());
+void dictionary_init();
+void dictionary_define_word(const char *name, forthvm_word_func func);
+forthvm_word* dictionary_find_word(const char *name);
 
-// Function to find the code associated with a word in the dictionary
-void (*dictionary_find(const char* word))();
-
-#endif /* DICTIONARY_H */
+#endif // DICTIONARY_H
 
