@@ -22,12 +22,22 @@ void bye() {
     exit(0);
 }
 
+// void qrx() {
+//    forthvm_push(getchar());
+//    if (forthvm_pop() != 0) {
+//        forthvm_push(1);
+//    }
+//}
+
+
 void qrx() {
-    forthvm_push(getchar());
-    if (forthvm_pop() != 0) {
+    int32_t temp = getchar();
+    forthvm_push(temp);
+    if (temp != 0) {
         forthvm_push(1);
     }
 }
+
 
 void txsto() {
     putchar((char)forthvm_pop());
@@ -498,6 +508,13 @@ void forthvm_init() {
     dictionary_define_word("NEGATE", &negate);
     dictionary_define_word("MAX2", &max2);
     dictionary_define_word("MIN2", &min2);
+    
+   // Reset the program counter and other registers
+    IP = 0;
+    WP = 0;
+    P = 0;
+    S = -1;
+    R = -1;
 }
 
 // Execute a Forth word
@@ -513,4 +530,20 @@ void forthvm_push(int32_t value) {
 // Pop a value from the stack
 int32_t forthvm_pop() {
     return stack[S--];
+}
+
+// Execute the ForthVM 
+void forthvm_run() {
+    forthvm_init();
+
+    while (1) {
+        int32_t primNum = data[IP >> 2];
+        if (primNum < 0 || primNum > 63) {
+            printf("Primitive number out of range: %d\n", primNum);
+            exit(1);
+        }
+
+        void (*primFunc)(void) = primitives[primNum];
+        primFunc();
+    }
 }
