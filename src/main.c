@@ -17,6 +17,7 @@ int main() {
     io_init();
 
     // Define Forth words and add them to the dictionary
+// Define built-in words
 forthvm_define_word("BYE", &bye);
 forthvm_define_word("?RX", &qrx);
 forthvm_define_word("TX!", &txsto);
@@ -79,7 +80,6 @@ forthvm_define_word("NEGATE", &negate);
 forthvm_define_word("MAX2", &max2);
 forthvm_define_word("MIN2", &min2);
 
-
     // Create initial process
     ProcessID pid = process_create(&initial_process);
 
@@ -99,3 +99,4 @@ forthvm_define_word("MIN2", &min2);
     forthvm_reset();
     return 0;
 }
+
